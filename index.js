@@ -55,7 +55,7 @@ db.query(
 router.put("/", (req, res)=>{
     const nombre = req.body.nombre;
     const contenido = req.body.contenido;
-    const fecha = new Date().toISOString();
+    const fecha = new Date().toISOString().split('T')[0];
 
 db.query(
     "UPDATE resenas SET nombre=?, contenido=?, fecha=?",
