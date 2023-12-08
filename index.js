@@ -1,99 +1,89 @@
 const express = require("express");
-const mysql = require("mysql");
-const cors = require("cors");
+const mysql = require ("mysql");
+const cors = require ("cors");
 const bodyparser = require("body-parser");
 const app = express();
 const router = express.Router();
 
 app.use(cors());
-app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
-app.use("/api", router);
+app.use("/api",router);
 
-//Crear la conexion a la base de datos
-const db = mysql.createConnection({
+
+// Crearemos la conexion a la base de datos
+
+const db= mysql.createConnection({
     host: "localhost",
-    user: "vt_mgmr",
-    password: "123456",
-    database: "veterinaria"
+    user: "adminlacabana",
+    password: "654321",
+    database: "lacabana",
 });
 
-//Metodo listar
-router.get('/', (req, res) => {
-    db.query("select * from Adopciones", (error, resultado) => {
-        if (error) {
-            console.log("Error: ", error);
-            res.status(500).send("Error al obtener las adopciones");
-        } else {
-            res.send(resultado);
-        }
+
+// Metodo listar
+router.get("/", (req, res)=>{
+    db.query("SELECT * FROM resenas",(error, resultado)=>{
+        error ? console.log("Error", error): res.send(resultado);
     });
 });
 
-//Metodo guardar
-router.post("/", (req, res) => {
-    const nombreAdoptante = req.body.nombreAdoptante;
-    const telefono = req.body.telefono;
-    const email = req.body.email;
-    const domicilio = req.body.domicilio;
-    const mascota = req.body.mascota;
-    const carcarteristicas = req.body.carcarteristicas;
-    const interesAdoptar = req.body.interesAdoptar;
+//Metodo Guardar
 
-    db.query("INSERT INTO Adopciones(nombre_adoptante, telefono, email, domicilio, mascota, caracteristicas, interes_adoptar) VALUES(?, ?, ?, ?, ?, ?, ?);",
-        [
-            nombreAdoptante,
-            telefono,
-            email,
-            domicilio,
-            mascota,
-            carcarteristicas,
-            interesAdoptar
-        ],
-        (error, resultado) => {
-            error
-                ? console.log("Error: ", error)
-                : res.send("Adopcion registrada con exito");
-        })
+router.post("/",(req,res)=>{
+    const nombre = req.body.nombre;
+    const contenido = req.body.contenido;
+    const fecha = new Date().toISOString();
+
+db.query(
+    "INSERT INTO resenas(nombre, contenido, fecha) VALUES(?,?,?);",
+    [
+        nombre,
+        contenido,
+        fecha
+    ],
+    (error, resultado) => {
+        error
+        ? console.log("Error: ", error)
+        : res.send("Reseña guardada con éxito");
+    }
+);
 });
 
-//Metodo para actualizar
-router.put("/", (req, res) => {
-    const id = req.body.id;
-    const nombreAdoptante = req.body.nombreAdoptante;
-    const telefono = req.body.telefono;
-    const email = req.body.email;
-    const domicilio = req.body.domicilio;
-    const mascota = req.body.mascota;
-    const carcarteristicas = req.body.carcarteristicas;
-    const interesAdoptar = req.body.interesde;
-    console.log(interesAdoptar);
+// Metodo para actualizar
 
-    db.query("UPDATE Adopciones SET nombre_adoptante=?, telefono=?, email=?, domicilio=?, mascota=?, caracteristicas=?, interes_adoptar=? WHERE id=?",
-        [
-            nombreAdoptante,
-            telefono,
-            email,
-            domicilio,
-            mascota,
-            carcarteristicas,
-            interesAdoptar,
-            id
-        ],
-        (error, resultado) => {
-            error
-                ? console.log("Error: ", error)
-                : res.send("Adopción actualixada con exito");
-        })
-})
+router.put("/", (req, res)=>{
+    const nombre = req.body.nombre;
+    const contenido = req.body.contenido;
+    const fecha = new Date().toISOString();
 
-router.delete("/:id", (req, res) =>{
+db.query(
+    "UPDATE resenas SET nombre=?, contenido=?, fecha=?",
+    [
+        nombre,
+        contenido,
+        fecha
+    ],
+    (error, resultado) => {
+        error
+        ? console.log("Error: ", error)
+        : res.send("Rseña actualizada con éxito");
+    }
+);
+});
+
+// Metodo para eliminar
+router.delete("/:id",(req, res)=>{
     const id = req.params.id;
+    db.query("DELETE FROM resenas WHERE id=?",id,(error, resultado)=>{
+        error? console.log("Error: ", error): res.send(resultado);
+    });
+});
 
-    db.query("DELETE FROM Adopciones WHERE id=?", id, (error, resultado) => {
-        error ? console.log("Error: ", error) : res.send(resultado);
-    })
-})
 
-//Inicializar servidor
-app.listen(3005, ()=>console.log('Servidor funcionando en el puerto 3005'));
+//Inicilizando servidor
+
+app.listen(3005,()=> console.log("Servidor funcionando en el puerto 3005"));
+
+
+  
