@@ -33,7 +33,7 @@ router.get("/", (req, res)=>{
 router.post("/",(req,res)=>{
     const nombre = req.body.nombre;
     const contenido = req.body.contenido;
-    const fecha = new Date().toISOString();
+    const fecha = new Date().toISOString().split('T')[0];
 
 db.query(
     "INSERT INTO resenas(nombre, contenido, fecha) VALUES(?,?,?);",
