@@ -13,11 +13,11 @@ app.use("/api",router);
 
 // Crearemos la conexion a la base de datos
 
-const db= mysql.createConnection({
-    host: "localhost",
-    user: "adminlacabana",
-    password: "654321",
-    database: "lacabana",
+const db = mysql.createConnection({
+    host: "bdaqkm6urlucohzsenld-mysql.services.clever-cloud.com",
+    user: "uamk172mlpey7him",
+    password: "BNieiHyuzNPOj3F2KB55",
+    database: "bdaqkm6urlucohzsenld"
 });
 
 
